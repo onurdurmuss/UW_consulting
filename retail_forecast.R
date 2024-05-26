@@ -110,3 +110,5 @@ run_analysis <- function() {
   
   write.csv(predicted_sales, "predicted_sales_output.csv", row.names = FALSE)
 }
+# Run the analysis
+run_analysis()
