@@ -49,11 +49,7 @@ preprocess_data <- function(sales_records) {
            PE_8WK_CALC = (QUANTITY_8WK_AFTER / QUANTITY_8WK_BEFORE - 1) / DISCOUNT_PERC)
 }
 
-# Summary function
-summarize_pe <- function(filtered_sales_data) {
-  filtered_sales_data %>%
-    group_by(DISCOUNT_PERC) %>%
-    summarise(AVG_PE_4WK = mean(PE_4WK_CALC, na.rm = TRUE),
-              AVG_PE_8WK = mean(PE_8WK_CALC, na.rm = TRUE),
-              RECORD_COUNT = n())
+# Model training function
+train_model <- function(filtered_sales_data) {
+  lm(QUANTITY_4WK_AFTER ~ DISCOUNT_PERC + PE_4WK_CALC, data = filtered_sales_data)
 }
