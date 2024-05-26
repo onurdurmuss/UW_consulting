@@ -86,4 +86,24 @@ run_analysis <- function() {
   print(paste("Optimal Discount Percentage:", optimal_discount$DISCOUNT_PERC))
   
   write.csv(predicted_sales, "predicted_sales_output.csv", row.names = FALSE)
+# Model training function
+train_model <- function(filtered_sales_data) {
+  lm(QUANTITY_4WK_AFTER ~ DISCOUNT_PERC + PE_4WK_CALC, data = filtered_sales_data)
+}
+# Prediction function
+predict_sales <- function(model) {
+  discounts <- seq(0.1, 0.5, by = 0.1)
+  predicted_sales <- data.frame(DISCOUNT_PERC = discounts)
+  predicted_sales$PREDICTED_QUANTITY_4WK <- predict(model, newdata = predicted_sales)
+  predicted_sales
+}
+# Visualization function
+visualize_predictions <- function(predicted_sales) {
+  ggplot(predicted_sales, aes(x = DISCOUNT_PERC, y = PREDICTED_QUANTITY_4WK)) +
+    geom_line() +
+    geom_point() +
+    labs(title = "Predicted Sales for Different Discount Percentages",
+         x = "Discount Percentage",
+         y = "Predicted 4-Week Sales") +
+    theme_minimal()
 }
