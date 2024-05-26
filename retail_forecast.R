@@ -60,3 +60,13 @@ predict_sales <- function(model) {
   predicted_sales$PREDICTED_QUANTITY_4WK <- predict(model, newdata = predicted_sales)
   predicted_sales
 }
+# Visualization function
+visualize_predictions <- function(predicted_sales) {
+  ggplot(predicted_sales, aes(x = DISCOUNT_PERC, y = PREDICTED_QUANTITY_4WK)) +
+    geom_line() +
+    geom_point() +
+    labs(title = "Predicted Sales for Different Discount Percentages",
+         x = "Discount Percentage",
+         y = "Predicted 4-Week Sales") +
+    theme_minimal()
+}
