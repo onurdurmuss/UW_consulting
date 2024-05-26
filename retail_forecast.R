@@ -57,3 +57,28 @@ summarize_pe <- function(filtered_sales_data) {
               AVG_PE_8WK = mean(PE_8WK_CALC, na.rm = TRUE),
               RECORD_COUNT = n())
 }
+
+
+# Main function to run the analysis
+run_analysis <- function() {
+  con <- connect_to_db()
+  data <- load_data(con)
+  dbDisconnect(con)
+  
+  filtered_sales_data <- preprocess_data(data$sales_records)
+  summary <- summarize_pe(filtered_sales_data)
+  
+  model <- train_model(filtered_sales_data)
+  predicted_sales <- predict_sales(model)
+  
+  print(predicted_sales)
+  visualize_predictions(predicted_sales)
+  
+  optimal_discount <- predicted_sales %>%
+    filter(PREDICTED_QUANTITY_4WK == max(PREDICTED_QUANTITY_4WK)) %>%
+    select(DISCOUNT_PERC)
+  
+  print(paste("Optimal Discount Percentage:", optimal_discount$DISCOUNT_PERC))
+  
+  write.csv(predicted_sales, "predicted_sales_output.csv", row.names = FALSE)
+}
