@@ -39,3 +39,21 @@ load_data <- function(con) {
   
   list(markdown_hist = markdown_hist, product_info = product_info, sales_records = sales_records)
 }
+
+
+# Data preprocessing function
+preprocess_data <- function(sales_records) {
+  sales_records %>%
+    filter(QUANTITY_8WK_BEFORE > 0, QUANTITY_4WK_BEFORE > 0, QUANTITY_8WK_AFTER > 0, QUANTITY_4WK_AFTER > 0) %>%
+    mutate(PE_4WK_CALC = (QUANTITY_4WK_AFTER / QUANTITY_4WK_BEFORE - 1) / DISCOUNT_PERC,
+           PE_8WK_CALC = (QUANTITY_8WK_AFTER / QUANTITY_8WK_BEFORE - 1) / DISCOUNT_PERC)
+}
+
+# Summary function
+summarize_pe <- function(filtered_sales_data) {
+  filtered_sales_data %>%
+    group_by(DISCOUNT_PERC) %>%
+    summarise(AVG_PE_4WK = mean(PE_4WK_CALC, na.rm = TRUE),
+              AVG_PE_8WK = mean(PE_8WK_CALC, na.rm = TRUE),
+              RECORD_COUNT = n())
+}
