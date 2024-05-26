@@ -53,3 +53,10 @@ preprocess_data <- function(sales_records) {
 train_model <- function(filtered_sales_data) {
   lm(QUANTITY_4WK_AFTER ~ DISCOUNT_PERC + PE_4WK_CALC, data = filtered_sales_data)
 }
+# Prediction function
+predict_sales <- function(model) {
+  discounts <- seq(0.1, 0.5, by = 0.1)
+  predicted_sales <- data.frame(DISCOUNT_PERC = discounts)
+  predicted_sales$PREDICTED_QUANTITY_4WK <- predict(model, newdata = predicted_sales)
+  predicted_sales
+}
