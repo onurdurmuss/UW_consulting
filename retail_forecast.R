@@ -1,4 +1,9 @@
 # Loading necessary libraries
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+library(caret)
 library(DBI)
 
 # Database connection function
